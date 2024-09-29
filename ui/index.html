@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private E Tankstelle</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header { background-color: #4CAF50; color: white; padding: 10px 0; text-align: center; }
+        nav ul { list-style-type: none; padding: 0; }
+        nav ul li { display: inline; margin: 0 15px; }
+        nav a { color: white; text-decoration: none; }
+        main { padding: 20px; }
+        footer { text-align: center; padding: 10px 0; background-color: #f1f1f1; }
+        section { margin: 20px 0; }
+        input[type="number"], input[type="submit"] {
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1em;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #owner-section, #customer-section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Private E Tankstelle</h1>
+</header>
+<main>
+    <!-- Owner Section -->
+    <section id="owner-section">
+        <h2>Owner Dashboard</h2>
+        <form id="owner-form">
+            <label for="kwh-price">Set Price per kWh (€):</label><br>
+            <input type="number" id="kwh-price" name="kwh-price" step="0.01" min="0" placeholder="Enter price per kWh" required><br>
+            <input type="submit" value="Set Price">
+        </form>
+        <p id="current-price">Current price per kWh: Not set</p>
+    </section>
+
+    <!-- Customer Section -->
+    <section id="customer-section">
+        <h2>Customer Dashboard</h2>
+        <p id="customer-price">Price per kWh: Not set</p>
+        <button id="accept-price" disabled>Accept Price</button>
+        <p id="acceptance-status"></p>
+    </section>
+</main>
+<footer>
+    <p>&copy; 2024 Private E Tankstelle</p>
+</footer>
+
+<script>
+    // Handling the owner form submission and setting price
+    const ownerForm = document.getElementById('owner-form');
+    const kwhPriceInput = document.getElementById('kwh-price');
+    const currentPriceDisplay = document.getElementById('current-price');
+    const customerPriceDisplay = document.getElementById('customer-price');
+    const acceptPriceButton = document.getElementById('accept-price');
+    const acceptanceStatus = document.getElementById('acceptance-status');
+    let kwhPrice = 0;
+
+    ownerForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        kwhPrice = parseFloat(kwhPriceInput.value);
+        currentPriceDisplay.textContent = `Current price per kWh: €${kwhPrice.toFixed(2)}`;
+        customerPriceDisplay.textContent = `Price per kWh: €${kwhPrice.toFixed(2)}`;
+        acceptPriceButton.disabled = false;
+    });
+
+    // Handling customer accepting the price
+    acceptPriceButton.addEventListener('click', function() {
+        acceptanceStatus.textContent = `You have accepted the price of €${kwhPrice.toFixed(2)} per kWh.`;
+    });
+</script>
+</body>
+</html>

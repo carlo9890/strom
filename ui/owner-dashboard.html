@@ -1,0 +1,23 @@
+<section id="owner-dashboard">
+    <h2>Owner Dashboard</h2>
+    <form id="owner-form">
+        <label for="kwh-price">Set Price per kWh (€):</label><br>
+        <input type="number" id="kwh-price" name="kwh-price" step="0.01" min="0" placeholder="Enter price per kWh" required><br>
+        <input type="submit" value="Set Price">
+    </form>
+    <p id="current-price">Current price per kWh: Not set</p>
+
+    <script>
+        // Handle form submission and set the price
+        const ownerForm = document.getElementById('owner-form');
+        const kwhPriceInput = document.getElementById('kwh-price');
+        const currentPriceDisplay = document.getElementById('current-price');
+
+        ownerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const kwhPrice = parseFloat(kwhPriceInput.value);
+            currentPriceDisplay.textContent = `Current price per kWh: €${kwhPrice.toFixed(2)}`;
+            sessionStorage.setItem('kwhPrice', kwhPrice); // Store price in session storage
+        });
+    </script>
+</section>

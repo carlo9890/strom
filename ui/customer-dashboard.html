@@ -1,0 +1,23 @@
+<section id="customer-dashboard">
+    <h2>Customer Dashboard</h2>
+    <p id="customer-price">Price per kWh: Not set</p>
+    <button id="accept-price" disabled>Accept Price</button>
+    <p id="acceptance-status"></p>
+
+    <script>
+        // Handle the display of the price and acceptance logic
+        const kwhPrice = sessionStorage.getItem('kwhPrice');
+        const customerPriceDisplay = document.getElementById('customer-price');
+        const acceptPriceButton = document.getElementById('accept-price');
+        const acceptanceStatus = document.getElementById('acceptance-status');
+
+        if (kwhPrice) {
+            customerPriceDisplay.textContent = `Price per kWh: €${parseFloat(kwhPrice).toFixed(2)}`;
+            acceptPriceButton.disabled = false;
+
+            acceptPriceButton.addEventListener('click', function() {
+                acceptanceStatus.textContent = `You have accepted the price of €${parseFloat(kwhPrice).toFixed(2)} per kWh.`;
+            });
+        }
+    </script>
+</section>

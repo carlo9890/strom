@@ -1,44 +1,11 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Private E Tankstelle</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background-color: #4CAF50; color: white; padding: 10px 0; text-align: center; }
-        nav ul { list-style-type: none; padding: 0; text-align: center; background-color: #333; margin: 0; }
-        nav ul li { display: inline-block; }
-        nav ul li a { color: white; padding: 14px 20px; display: inline-block; text-decoration: none; }
-        nav ul li a:hover { background-color: #4CAF50; }
-        main { padding: 20px; }
-        footer { text-align: center; padding: 10px 0; background-color: #f1f1f1; }
-        section { display: none; } /* Hide sections by default */
-        input[type="number"], input[type="submit"] {
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 1em;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 1em;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #owner-section, #customer-section {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        #owner-dashboard, #customer-dashboard{
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"> <!-- Link to external stylesheet -->
 </head>
 <body>
 <header>
@@ -53,23 +20,7 @@
 </nav>
 
 <main>
-    <!-- Owner Dashboard -->
-    <section id="owner-dashboard">
-        <h2>Owner Dashboard</h2>
-        <form id="owner-form">
-            <label for="kwh-price">Set Price per kWh (€):</label><br>
-            <input type="number" id="kwh-price" name="kwh-price" step="0.01" min="0" placeholder="Enter price per kWh" required><br>
-            <input type="submit" value="Set Price">
-        </form>
-        <p id="current-price">Current price per kWh: Not set</p>
-    </section>
-
-    <section id="customer-dashboard">
-        <h2>Customer Dashboard</h2>
-        <p id="customer-price">Price per kWh: Not set</p>
-        <button id="accept-price" disabled>Accept Price</button>
-        <p id="acceptance-status"></p>
-    </section>
+    <div id="content"> <!-- This will be the dynamic content area --></div>
 </main>
 
 <footer>
@@ -77,63 +28,48 @@
 </footer>
 
 <script>
-    // Variables for handling navigation and showing dashboards
     const ownerLink = document.getElementById('owner-link');
     const customerLink = document.getElementById('customer-link');
-    const customerLink1 = document.getElementById('customer-link1');
+    const content = document.getElementById('content');
 
-    const ownerDashboard = document.getElementById('owner-dashboard');
-    const customerDashboard = document.getElementById('customer-dashboard');
-    const customerDashboard1 = document.getElementById('customer-dashboard1');
+    // Function to load an external HTML file and inject into the page
+    function init(url) {
 
-    // Show the respective dashboard when menu links are clicked
-    ownerLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        ownerDashboard.style.display = 'block';
-        customerDashboard.style.display = 'none';
-        customerDashboard1.style.display = 'none';
-    });
+        // Function to load external HTML files dynamically using fetch
+        function doLoad(url) {
+            return fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                content.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
 
-    customerLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        ownerDashboard.style.display = 'none';
-        customerDashboard.style.display = 'block';
-        customerDashboard1.style.display = 'none';
-    });
+        // Event listeners for menu items
+        ownerLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            doLoad('owner-dashboard.html');
+        });
 
-    customerLink1.addEventListener('click', function(event) {
-        event.preventDefault();
-        ownerDashboard.style.display = 'none';
-        customerDashboard.style.display = 'none';
-        customerDashboard1.style.display = 'block';
-    });
+        customerLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            doLoad('customer-dashboard.html');
+        });
 
-    // Handling the owner form submission and setting price
-    const ownerForm = document.getElementById('owner-form');
-    const kwhPriceInput = document.getElementById('kwh-price');
-    const currentPriceDisplay = document.getElementById('current-price');
-    const customerPriceDisplay = document.getElementById('customer-price');
-    const customerPriceDisplay1 = document.getElementById('customer-price1');
-    const acceptPriceButton = document.getElementById('accept-price');
-    const acceptPriceButton1 = document.getElementById('accept-price1');
-    const acceptanceStatus = document.getElementById('acceptance-status');
-    const acceptanceStatus1 = document.getElementById('acceptance-status1');
-    let kwhPrice = 0;
+        doLoad(url)
 
-    ownerForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        kwhPrice = parseFloat(kwhPriceInput.value);
-        currentPriceDisplay.textContent = `Current price per kWh: €${kwhPrice.toFixed(2)}`;
-        customerPriceDisplay.textContent = `Price per kWh: €${kwhPrice.toFixed(2)}`;
-        customerPriceDisplay1.textContent = `Price per kWh: €${kwhPrice.toFixed(2)}`;
-        acceptPriceButton.disabled = false;
-        acceptPriceButton1.disabled = false;
-    });
+    }
 
-    // Handling customer accepting the price
-    acceptPriceButton.addEventListener('click', function() {
-        acceptanceStatus.textContent = `You have accepted the price of €${kwhPrice.toFixed(2)} per kWh.`;
-    });
+    window.onload = function() {
+        init('owner-dashboard.html');
+    };
 </script>
 </body>
 </html>

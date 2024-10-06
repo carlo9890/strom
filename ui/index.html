@@ -7,12 +7,13 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
         header { background-color: #4CAF50; color: white; padding: 10px 0; text-align: center; }
-        nav ul { list-style-type: none; padding: 0; }
-        nav ul li { display: inline; margin: 0 15px; }
-        nav a { color: white; text-decoration: none; }
+        nav ul { list-style-type: none; padding: 0; text-align: center; background-color: #333; margin: 0; }
+        nav ul li { display: inline-block; }
+        nav ul li a { color: white; padding: 14px 20px; display: inline-block; text-decoration: none; }
+        nav ul li a:hover { background-color: #4CAF50; }
         main { padding: 20px; }
         footer { text-align: center; padding: 10px 0; background-color: #f1f1f1; }
-        section { margin: 20px 0; }
+        section { display: none; } /* Hide sections by default */
         input[type="number"], input[type="submit"] {
             padding: 10px;
             margin: 10px 0;
@@ -34,15 +35,26 @@
             padding: 20px;
             margin-top: 20px;
         }
+        #owner-dashboard, #customer-dashboard{
+            display: none;
+        }
     </style>
 </head>
 <body>
 <header>
     <h1>Private E Tankstelle</h1>
 </header>
+
+<nav>
+    <ul>
+        <li><a href="#" id="owner-link">Owner Dashboard</a></li>
+        <li><a href="#" id="customer-link">Customer Dashboard</a></li>
+    </ul>
+</nav>
+
 <main>
-    <!-- Owner Section -->
-    <section id="owner-section">
+    <!-- Owner Dashboard -->
+    <section id="owner-dashboard">
         <h2>Owner Dashboard</h2>
         <form id="owner-form">
             <label for="kwh-price">Set Price per kWh (€):</label><br>
@@ -52,34 +64,60 @@
         <p id="current-price">Current price per kWh: Not set</p>
     </section>
 
-    <!-- Customer Section -->
-    <section id="customer-section">
+    <section id="customer-dashboard">
         <h2>Customer Dashboard</h2>
         <p id="customer-price">Price per kWh: Not set</p>
         <button id="accept-price" disabled>Accept Price</button>
         <p id="acceptance-status"></p>
     </section>
-
-    <!-- Customer Section -->
-    <section id="customer-section1">
-        <h2>Customer Dashboard</h2>
-        <p id="customer-price1">Price per kWh: Not set</p>
-        <button id="accept-price1" disabled>Accept Price</button>
-        <p id="acceptance-status1"></p>
-    </section>
 </main>
+
 <footer>
     <p>&copy; 2024 Private E Tankstelle</p>
 </footer>
 
 <script>
+    // Variables for handling navigation and showing dashboards
+    const ownerLink = document.getElementById('owner-link');
+    const customerLink = document.getElementById('customer-link');
+    const customerLink1 = document.getElementById('customer-link1');
+
+    const ownerDashboard = document.getElementById('owner-dashboard');
+    const customerDashboard = document.getElementById('customer-dashboard');
+    const customerDashboard1 = document.getElementById('customer-dashboard1');
+
+    // Show the respective dashboard when menu links are clicked
+    ownerLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        ownerDashboard.style.display = 'block';
+        customerDashboard.style.display = 'none';
+        customerDashboard1.style.display = 'none';
+    });
+
+    customerLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        ownerDashboard.style.display = 'none';
+        customerDashboard.style.display = 'block';
+        customerDashboard1.style.display = 'none';
+    });
+
+    customerLink1.addEventListener('click', function(event) {
+        event.preventDefault();
+        ownerDashboard.style.display = 'none';
+        customerDashboard.style.display = 'none';
+        customerDashboard1.style.display = 'block';
+    });
+
     // Handling the owner form submission and setting price
     const ownerForm = document.getElementById('owner-form');
     const kwhPriceInput = document.getElementById('kwh-price');
     const currentPriceDisplay = document.getElementById('current-price');
     const customerPriceDisplay = document.getElementById('customer-price');
+    const customerPriceDisplay1 = document.getElementById('customer-price1');
     const acceptPriceButton = document.getElementById('accept-price');
+    const acceptPriceButton1 = document.getElementById('accept-price1');
     const acceptanceStatus = document.getElementById('acceptance-status');
+    const acceptanceStatus1 = document.getElementById('acceptance-status1');
     let kwhPrice = 0;
 
     ownerForm.addEventListener('submit', function(event) {
@@ -87,7 +125,9 @@
         kwhPrice = parseFloat(kwhPriceInput.value);
         currentPriceDisplay.textContent = `Current price per kWh: €${kwhPrice.toFixed(2)}`;
         customerPriceDisplay.textContent = `Price per kWh: €${kwhPrice.toFixed(2)}`;
+        customerPriceDisplay1.textContent = `Price per kWh: €${kwhPrice.toFixed(2)}`;
         acceptPriceButton.disabled = false;
+        acceptPriceButton1.disabled = false;
     });
 
     // Handling customer accepting the price

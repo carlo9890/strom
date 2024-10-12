@@ -14,8 +14,8 @@
 
 <nav>
     <ul>
-        <li><a href="#" id="owner-link">Owner Dashboard</a></li>
-        <li><a href="#" id="customer-link">Customer Dashboard</a></li>
+        <li><a href="#" id="owner-link">Owner</a></li>
+        <li><a href="#" id="customer-link">Customer</a></li>
     </ul>
 </nav>
 
@@ -55,12 +55,12 @@
         // Event listeners for menu items
         ownerLink.addEventListener('click', function(event) {
             event.preventDefault();
-            doLoad('owner-dashboard.html');
+            doLoad('owner.html');
         });
 
         customerLink.addEventListener('click', function(event) {
             event.preventDefault();
-            doLoad('customer-dashboard.html');
+            doLoad('customer.html');
         });
 
         doLoad(url)
@@ -68,7 +68,7 @@
     }
 
     window.onload = function() {
-        init('owner-dashboard.html');
+        init('owner.html');
     };
 </script>
 </body>
